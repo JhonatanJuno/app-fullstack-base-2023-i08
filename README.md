@@ -156,42 +156,227 @@ En esta sección podés ver los detalles específicos de funcionamiento del cód
 
 <details><summary><b>Mira los detalles de implementación</b></summary><br>
 
+### Login de Usuario
+Se puede hacer login de usuario en la primera parte de la aplicación web. 
+
+![Implementacion](doc/login1.png)
+
+Al ingresar los datos de usuario y contraseña se validará con los usuarios previamente cargados en la base de datos. De momento solo hacemos la validación de usuario y mostramos un mensaje si la contraseña es correcta o no. Luego la vista de login desaparece para dar mayor espacio a la visualizacion de los dispositivos.
+
+![Implementacion](doc/login2.png)
+
 ### Agregar un dispositivo
 
-Completá los pasos para agregar un dispositivo desde el cliente web.
+Para agregar un dispositivo debemos hacer clic en el boton de "AGREGAR EQUIPOS" que se encuentra en la parte inferior.
+![Implementacion](doc/add1.png)
+
+Debemos llenar los campos marcados y hacer clic en "AÑADIR DISPOSITIVO".
+![Implementacion](doc/add2.png)
+
+Verificamos que el dispositivo fue añadido al final con exito.
+![Implementacion](doc/add3.png)
+
+### Actualizar/Eliminar  un dispositivo
+
+Seleccionamos el dispositivo, haciendo clic sobre el nombre, para deslizar las opciones:
+![Implementacion](doc/upd1.png)
+
+Podemos editar cualquier de los campos, o si lo preferimos eliminar el dispositivo.
 
 ### Frontend
 
-Completá todos los detalles sobre cómo armaste el frontend, sus interacciones, etc.
+El archivo principal es el "index.html. En este archivo definimos la secciones del login de usuario. Asimismo,  declaramos los botones y la caja de dispositivos que contiene el resultado de la consulta al backend y lo muestra en forma de lista.
+
+Otro de los archivos importantes es "framework.ts", que mediante la tecnologia Ajax pemite definir las peticiones asíncronas al servidor backend. Aqui tambien definimos el metodo "recoverElement" para recuperar un elemento de la pagina HTML.
+
+El archivo "httpResponde.ts" crea la interfaz HttpResponse que permite manejar las respuestas del servidor para los metodos HTTP.
+
+En el archivo "device.ts" tenemos la clase que define los parametros que tendra el dispositivo, esto se usará para elaborar las consultas a la base de datos.
+
+El archivo principal del frontend es main.ts. Lo primero que hacemos es consultar la lista de disositivos, que se muestra por defecto al momento de entrar en la aplicación. 
+Cuando es la primera vez que se corre la aplicacion y la base no haya cargado, se mostrara un mensaje de "Failed to load devices". Tambien mostramos el panel de login inicial. Luego que un usuario hace clic en login, se ejecuta una consulta con un POST al backend. Se devuelve un mensaje de bienvenida y se oculta la vista.
+
+Luego tenemos la lista de dispositivos, segun sea el caso, tendremos un boton para "on" "off" o un deslizable con valores de 0 a 10. Tenemos un "sumary" al que acedemos al hacer clic para poder visualizar las opciones de "ACTUALIZAR" y "ELIMINAR".  Cuando actualizamos podemos editar los campos del dispositivos, y ademas elegir si es "dimmable" o no. Si elegimos la opcion de eleminar, se quita el registro de la lista.
+
+Finalmente en la ultima parte, tenemos el boton para añadir dispositivos.
 
 ### Backend
 
-Completá todos los detalles de funcionamiento sobre el backend, sus interacciones con el cliente web, la base de datos, etc.
+Se trabaja con el framework "express" con el que creamos la API de conexion con las rutas de acceso y los metodos necesarios. el paquete "utils" tambien fue necesario para poder interecturar con la base de datos mediante "querys".
+
+El primer método implementado es el metodo POST para la validacion del login de usuario. Se recibe los datos del formulario de login, se genera una consulta SQL y ve verifica en la tabla si el usuario existe y si tiene la contraseña indicada. Devolvemos el mensaje "Inicio de sesión correcto" para el frontend.
+
+El siguiente método implementado es un GET para la lista de dispositivos. Este metodo es accedido por el frontend para recuperar y mostrar en pantalla los dispositivos.
+
+Luego tenemos un método POST para crear nuevos dispositivos en la base de datos. Esto en base al formulario de ingreso de nuevo dispositivo. Todos los campos deben venir con datos, de lo contrario devolvemos un "Error creating device"
+
+Tenemos dos metodos POST adiconales para actualizar el estado del dispotivo. Y Finalmente un POST para eliminar un dispositivo seleccionado.
 
 <details><summary><b>Ver los endpoints disponibles</b></summary><br>
 
-Completá todos los endpoints del backend con los metodos disponibles, los headers y body que recibe, lo que devuelve, ejemplos, etc.
+1) Verificar el login de un usuario
+```json
+{
+    "url": "http://localhost:8000/usuarios/",
+    "method": "post",
+    "request_headers": "application/json",
+    "request_body": 
+        {   
+            "usuario": "Jhonatan Juno",
+            "contraseña": "123456"
+        },
+    "response_code": 200,
+    "response_body": {
+        "message": "Inicio de sesión correcto"
+    },
+}
+```  
 
-1) Devolver el estado de los dispositivos.
+2)Obtener lista de los dispositivos.
 
 ```json
 {
+    "url": "http://localhost:8000/listDevices/",
     "method": "get",
     "request_headers": "application/json",
     "request_body": "",
     "response_code": 200,
     "request_body": {
         "devices": [
-            {
-                "id": 1,
-                "status": true,
-                "description": "Kitchen light"
-            }
-        ]
+                        {
+                            "id":1,
+                            "name":"Lampara 1",
+                            "description":"Luz living",
+                            "state":1,
+                            "type":0,
+                            "dimmable":1
+                        },
+                        {
+                            "id":2,
+                            "name":"Lampara 2",
+                            "description":"Luz cocina",
+                            "state":0,
+                            "type":0,
+                            "dimmable":0
+                        },
+                        {
+                            "id":3,
+                            "name":"Velador",
+                            "description":"Velador living",
+                            "state":1,
+                            "type":0,
+                            "dimmable":1
+                        }
+                    ]
     },
 }
 ``` 
-
+3) Crear un nuevo dispositivo
+```json
+{
+    "url": "http://localhost:8000/insertDevice/",
+    "method": "post",
+    "request_headers": "application/json",
+    "request_body": 
+        {   
+            "name": "Lampara 5", 
+            "description": "Lampara de prueba", 
+            "state": 0, 
+            "type": 0, 
+            "dimmable": 0 
+        },
+    "response_code": 200,
+    "response_body": 
+        {
+            "fieldCount":0,
+            "affectedRows":1,
+            "insertId":8,
+            "serverStatus":2,
+            "warningCount":0,
+            "message":"",
+            "protocol41":true,
+            "changedRows":0
+        },
+}
+``` 
+4) Actualizar el estado on/off del dispositivo creado
+```json
+{
+    "url": "http://localhost:8000/updateState/",
+    "method": "post",
+    "request_headers": "application/json",
+    "request_body": 
+        {
+                "id": 1, //Id dispositivo
+                "state":0 //Estado off=0, Estado on = 10
+        },
+    "response_code": 200,
+    "response_body": 
+        {
+            "fieldCount":0,
+            "affectedRows":1,
+            "insertId":0,
+            "serverStatus":2,
+            "warningCount":0,
+            "message":"(Rows matched: 1 Changed: 1 Warnings: 0",
+            "protocol41":true,
+            "changedRows":1
+        }
+}
+``` 
+5) Modificar un dispositivo en la Base de datos
+```json
+{
+    "url": "http://localhost:8000/updateDevice/",
+    "method": "post",
+    "request_headers": "application/json",
+    "request_body": 
+               {
+                    "id": 1,
+                    "name": "Lampara 1",
+                    "description": "Luz de la Sala",
+                    "state":1,
+                    "type":0,
+                    "dimmable":1            
+                },
+    "response_code": 200,
+    "response_body": 
+        {
+            "fieldCount":0,
+            "affectedRows":1,
+            "insertId":0,
+            "serverStatus":2,
+            "warningCount":0,
+            "message":"(Rows matched: 1 Changed: 1 Warnings: 0",
+            "protocol41":true,
+            "changedRows":1
+        }
+}
+``` 
+6) Eliminar un dispositivo en la Base de datos
+```json
+{
+    "url": "http://localhost:8000/deleteDevice/",
+    "method": "post",
+    "request_headers": "application/json",
+    "request_body": 
+               {
+                    "id": 8 //Id del dispositivo a borrar           
+                },
+    "response_code": 200,
+    "response_body": 
+        {
+            "fieldCount":0,
+            "affectedRows":1,
+            "insertId":0,
+            "serverStatus":2,
+            "warningCount":0,
+            "message":"",
+            "protocol41":true,
+            "changedRows":0
+        }
+}
+``` 
 </details>
 
 </details>
