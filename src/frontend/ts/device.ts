@@ -4,4 +4,7 @@ class Device{
     public name: string;
     public state: boolean;
     public type: number;
-  }
+    //añadimos el atributo dimmable
+    public dimmable: boolean;
+  
+}
