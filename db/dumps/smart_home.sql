@@ -1,13 +1,18 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Servidor: mysql-server:3306
--- Tiempo de generación: 27-06-2023 a las 17:12:27
--- Versión del servidor: 5.7.42
--- Versión de PHP: 8.1.17
+-- Host: localhost
+-- Generation Time: May 26, 2019 at 02:50 PM
+-- Server version: 5.7.26-0ubuntu0.16.04.1
+-- PHP Version: 7.0.33-0ubuntu0.16.04.4
+
+CREATE DATABASE IF NOT EXISTS smart_home;
+
+USE smart_home;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,87 +23,70 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `smart_home`
+-- Database: `smart_home`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Devices`
+-- Table structure for table `Devices`
 --
-
-CREATE TABLE `Devices` (
-  `id` int(11) NOT NULL,
-  `name` varchar(64) NOT NULL,
-  `description` varchar(128) NOT NULL,
-  `state` int(11) NOT NULL,
-  `type` int(11) NOT NULL,
-  `dimmable` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `Devices`
---
-
-INSERT INTO `Devices` (`id`, `name`, `description`, `state`, `type`, `dimmable`) VALUES
-(8, 'Lampara 1', 'Lampara de la Sala', 0, 0, 1),
-(9, 'Lampara 2', 'Lampara de la Cocina', 0, 0, 0),
-(10, 'Lampara 3', 'Lampara del Cuarto Principal', 0, 0, 1),
-(11, 'Persiana 1', 'Persiana de la Sala', 0, 1, 1),
-(12, 'Persiana 2', 'Persiana de la Sala', 0, 1, 1);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios`
---
-
 CREATE TABLE `usuarios` (
   `ID` int(11) NOT NULL,
   `Usuario` varchar(255) NOT NULL,
   `Contraseña` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `usuarios`
---
+CREATE TABLE `Devices` (
+  `id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `description` varchar(128) NOT NULL,
+  `state` int(11) NOT NULL DEFAULT 0,
+  `type` int(11) NOT NULL DEFAULT 0,
+  `dimmable` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `Devices`
+--
 INSERT INTO `usuarios` (`ID`, `Usuario`, `Contraseña`) VALUES
-(1, 'Jhonatan Juno', '123456'),
-(2, 'Matias Ramos', '123456');
+(1, 'jhona', '123456');
+
+INSERT INTO `Devices` (`id`, `name`, `description`, `state`, `type`, `dimmable`) VALUES
+(1, 'Lampara 1', 'Luz living', 1, 0, 1),
+(2, 'Lampara 2', 'Luz cocina', 0, 0, 0),
+(3, 'Velador', 'Velador living', 1, 0, 1),
+(4, 'Persiana 1', 'Persiana living', 1, 1, 1),
+(5, 'Persiana 2', 'Persiana de la cocina', 1, 1, 1),
+(6, 'Persiana 3', 'Persiana balcon', 0, 1, 0);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `Devices`
---
-ALTER TABLE `Devices`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `usuarios`
+-- Indexes for table `Devices`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`ID`);
 
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `Devices`
---
 ALTER TABLE `Devices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de la tabla `usuarios`
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `Devices`
 --
 ALTER TABLE `usuarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
+ALTER TABLE `Devices`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+COMMIT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
