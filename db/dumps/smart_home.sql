@@ -50,7 +50,8 @@ CREATE TABLE `Devices` (
 -- Dumping data for table `Devices`
 --
 INSERT INTO `usuarios` (`ID`, `Usuario`, `Contraseña`) VALUES
-(1, 'jhona', '123456');
+(1, 'Jhonatan Juno', '123456'),
+(1, 'Matias Ramos', '123456');
 
 INSERT INTO `Devices` (`id`, `name`, `description`, `state`, `type`, `dimmable`) VALUES
 (1, 'Lampara 1', 'Luz living', 1, 0, 1),
